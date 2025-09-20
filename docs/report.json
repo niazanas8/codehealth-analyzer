@@ -1,0 +1,91 @@
+{
+  "metrics": {
+    "loc": 316,
+    "kloc": 0.316,
+    "cyclomatic_complexity": 18,
+    "functions": 4,
+    "comments": 11,
+    "longest_function_loc": 8,
+    "max_nesting_depth": 0,
+    "file_with_max_complexity": "./src/main.rs",
+    "max_file_complexity": 18,
+    "halstead_operators": 0,
+    "halstead_operands": 0,
+    "halstead_unique_operators": 0,
+    "halstead_unique_operands": 0,
+    "cyclomatic_distribution": [
+      3,
+      1,
+      0
+    ]
+  },
+  "maintainability_index": 0.0,
+  "files": [
+    {
+      "file": "./target/debug/build/serde_core-ffdfe807d6da76e4/out/private.rs",
+      "total_complexity": 0,
+      "functions": []
+    },
+    {
+      "file": "./target/debug/build/serde-d48bc21133c53e4c/out/private.rs",
+      "total_complexity": 0,
+      "functions": []
+    },
+    {
+      "file": "./src/main.rs",
+      "total_complexity": 18,
+      "functions": [
+        {
+          "file": "./src/main.rs",
+          "function": "analyze_file",
+          "complexity": 6,
+          "loc": 4
+        },
+        {
+          "file": "./src/main.rs",
+          "function": "calculate_metrics",
+          "complexity": 5,
+          "loc": 8
+        },
+        {
+          "file": "./src/main.rs",
+          "function": "calculate_maintainability_index",
+          "complexity": 2,
+          "loc": 5
+        },
+        {
+          "file": "./src/main.rs",
+          "function": "main",
+          "complexity": 5,
+          "loc": 8
+        }
+      ]
+    }
+  ],
+  "top_functions": [
+    {
+      "file": "./src/main.rs",
+      "function": "analyze_file",
+      "complexity": 6,
+      "loc": 4
+    },
+    {
+      "file": "./src/main.rs",
+      "function": "calculate_metrics",
+      "complexity": 5,
+      "loc": 8
+    },
+    {
+      "file": "./src/main.rs",
+      "function": "main",
+      "complexity": 5,
+      "loc": 8
+    },
+    {
+      "file": "./src/main.rs",
+      "function": "calculate_maintainability_index",
+      "complexity": 2,
+      "loc": 5
+    }
+  ]
+}
