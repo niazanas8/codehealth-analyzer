@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>CodeHealth Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; background:#fafafa; }
+    .grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
+    @media (min-width: 900px){ .grid { grid-template-columns: 1fr 1fr; } }
+    .card { padding: 16px; border: 1px solid #ddd; border-radius: 12px; background:#fff; box-shadow: 0 4px 10px rgba(0,0,0,.05); }
+    h1 { margin: 0 0 16px; }
+    h2 { margin: 0 0 12px; font-size: 18px; }
+    .muted { color:#666; }
+    table { width:100%; border-collapse: collapse; margin-top:8px; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid #eee; text-align:left; }
+    .pill { display:inline-block; padding:2px 8px; border-radius:999px; background:#f2f2f2; }
+  </style>
+</head>
+<body>
+  <h1>📊 CodeHealth Dashboard</h1>
+  <p class="muted">Data comes from <code>report.json</code>. Generate it with:<br>
+    <code>cargo run -- --path . --report json > dashboard/report.json</code>
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Summary</h2>
+      <div id="summary"></div>
+    </div>
+    <div class="card">
+      <h2>Complexity Distribution</h2>
+      <canvas id="distChart"></canvas>
+    </div>
+    <div class="card" style="grid-column: 1 / -1;">
+      <h2>Top 10 Complex Functions</h2>
+      <canvas id="topChart"></canvas>
+    </div>
+    <div class="card" style="grid-column: 1 / -1;">
+      <h2>Top Offenders (Table)</h2>
+      <table id="topTable">
+        <thead><tr><th>#</th><th>Function</th><th>File</th><th>Complexity</th><th>LOC</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    async function init(){
+      const res = await fetch('report.json');
+      const data = await res.json();
+      const m = data.metrics;
+
+      // Summary
+      document.getElementById('summary').innerHTML = `
+        <div>LOC: <span class="pill">${m.loc}</span></div>
+        <div>KLOC: <span class="pill">${m.kloc.toFixed(2)}</span></div>
+        <div>Total Complexity: <span class="pill">${m.cyclomatic_complexity}</span></div>
+        <div>Functions: <span class="pill">${m.functions}</span></div>
+        <div>Maintainability Index: <span class="pill">${data.maintainability_index.toFixed(2)}</span></div>
+        <div>Max File Complexity: <span class="pill">${m.max_file_complexity}</span></div>
+        <div>Worst File: <code>${m.file_with_max_complexity}</code></div>
+      `;
+
+      // Pie chart: complexity distribution
+      new Chart(document.getElementById('distChart').getContext('2d'), {
+        type: 'pie',
+        data: {
+          labels: ['Easy (≤5)', 'Moderate (6–10)', 'High (>10)'],
+          datasets: [{ data: m.cyclomatic_distribution, backgroundColor:['#4caf50','#ff9800','#f44336'] }]
+        }
+      });
+
+      // Bar chart: top 10 functions
+      const top = (data.top_functions || []).slice(0, 10);
+      new Chart(document.getElementById('topChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: top.map(t => t.function),
+          datasets: [{ label: 'Complexity', data: top.map(t => t.complexity), backgroundColor:'#2196f3' }]
+        },
+        options: { indexAxis: 'y' }
+      });
+
+      // Table
+      const tbody = document.querySelector('#topTable tbody');
+      top.forEach((t,i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${i+1}</td><td>${t.function}</td><td>${t.file}</td><td>${t.complexity}</td><td>${t.loc}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+    init();
+  </script>
+</body>
+</html>

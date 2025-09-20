@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>CodeHealth Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>📊 CodeHealth Dashboard</h1>
+  <div>
+    <h2>Complexity Distribution</h2>
+    <canvas id="distChart"></canvas>
+  </div>
+  <div>
+    <h2>Top Functions</h2>
+    <canvas id="topChart"></canvas>
+  </div>
+
+  <script>
+    async function init(){
+      const res = await fetch('report.json');
+      const data = await res.json();
+      const m = data.metrics;
+
+      // Pie chart
+      new Chart(document.getElementById('distChart'), {
+        type: 'pie',
+        data: {
+          labels: ['Easy (≤5)', 'Moderate (6–10)', 'High (>10)'],
+          datasets: [{ data: m.cyclomatic_distribution }]
+        }
+      });
+
+      // Bar chart
+      const top = (data.top_functions || []).slice(0, 10);
+      new Chart(document.getElementById('topChart'), {
+        type: 'bar',
+        data: {
+          labels: top.map(t => t.function),
+          datasets: [{ label: 'Complexity', data: top.map(t => t.complexity) }]
+        },
+        options: { indexAxis: 'y' }
+      });
+    }
+    init();
+  </script>
+</body>
+</html>
+
