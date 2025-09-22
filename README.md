@@ -41,7 +41,7 @@ Dashboard shows:
 ### Dashboard Example  
 Here’s the live dashboard generated from `report.json`:  
 
-![Dashboard Screenshot](docs/screenshot.png)  
+![Dashboard Screenshot](docs/Screenshot.png)  
 
 ---
 
