@@ -39,8 +39,11 @@ Dashboard shows:
 ## 🖼️ Screenshots  
 
 ### Dashboard Example  
+Here’s the live dashboard generated from `report.json`:  
 
 ![Dashboard Screenshot](docs/screenshot.png)  
+
+
 
 ---
 
